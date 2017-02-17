@@ -1,22 +1,42 @@
 ---
 title: "Analysis of Health and Economic Impacts of Weather Events in the US"
-output: html_document:
-  keep_md: true
+output: 
+      html_document:
+            keep_md: true
 ---
 ## Synopsis
 
+This quick analysis aims at defining which types of weather events have the strongest impacts on:
+1. population health (measured in terms of fatalities and injuries) 
+2. the economy (measured through property and crop damage)
 
 ## Data Processing
 
-We start by loading the data 
+We start by loading the data into R. We then create specific data frames to look at particular values (sum of fatalities, injuries, property damage and crop damage)
 
-```{r, echo=True}
+```{r, echo=TRUE, cache = TRUE}
 storm <- read.csv(bzfile("repdata_data_StormData.csv.bz2"))
 ```
 
 
 ## Analysis
 
+```{r, echo=TRUE}
+library(dplyr)
+by_ev <- group_by(storm, EVTYPE)
+test <- summarise(by_ev, sum(FATALITIES))
+names(test)[2] <- "SUM_FATAL"
+fatal <- test[test$SUM_FATAL != 0, ]
+fatal <- fatal[order(fatal$SUM_FATAL, decreasing = TRUE),]
+
+top <- fatal$SUM_FATAL[1:10]
+names(top) <- fatal$EVTYPE[1:10]
+barplot(top, cex.names=0.7, las=2, main="Total fatalities per event type - 1950-2011")
+```
+
 
 
 ## Results
+
+This rough analysis shows that *tornados* are the most harmful weather events in the US in terms of casualties.
+However, the first step to getting a more accurate picture would be to clean up the categorization of event types in the dataset (many distinct EVTYPE values for a single actual event type, such as *thunderstorm wind*)
