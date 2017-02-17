@@ -3,4 +3,20 @@ title: "Analysis of Health and Economic Impacts of Weather Events in the US"
 output: html_document:
   keep_md: true
 ---
+## Synopsis
 
+
+## Data Processing
+
+We start by loading the data 
+
+```{r, echo=True}
+storm <- read.csv(bzfile("repdata_data_StormData.csv.bz2"))
+```
+
+
+## Analysis
+
+
+
+## Results
